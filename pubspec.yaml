@@ -1,0 +1,72 @@
+name: awrad_app
+description: Majmua Awrad wa Wazaif + PanjSurah Shareef - Islamic Book App
+publish_to: 'none'
+version: 1.0.0+3
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  photo_view: ^0.15.0
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  # Tool for app icon generation
+  flutter_launcher_icons: ^0.13.1
+  # Tool for image conversion
+  image: ^4.2.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/imgs/logo.png"
+  adaptive_icon_background: "#1B5E20"
+  adaptive_icon_foreground: "assets/imgs/logo.png"
+
+flutter:
+  uses-material-design: true
+  
+  fonts:
+    - family: JameelNooriNastaliq
+      fonts:
+        - asset: "assets/fonts/Jameel Noori Nastaleeq.ttf"
+
+  assets:
+    - assets/imgs/
+    - assets/pages/
+    - assets/panjsurah/yaseen/
+    - assets/panjsurah/kehf/
+    - assets/panjsurah/rehman/
+    - assets/panjsurah/waqia/
+    - assets/panjsurah/mulk/
+    - assets/panjsurah/fatah/
+    - assets/panjsurah/muzzamil/
+    - assets/panjsurah/deen/
+    - assets/panjsurah/baqrah/
+    - assets/panjsurah/fatiha/
+    - assets/panjsurah/falaq/
+    - assets/panjsurah/kursi/
+    - assets/panjsurah/hashar/
+    - assets/panjsurah/kalma/
+    - assets/panjsurah/kalmaastaghfar/
+    - assets/panjsurah/darood/
+    - assets/panjsurah/dua/
+    - assets/panjsurah/nama/
+    - assets/panjsurah/nimzazkar/
+    - assets/panjsurah/zikar/
+    - assets/panjsurah/kafal/
+    - assets/panjsurah/hajat/
+    - assets/panjsurah/khajgan/
+    - assets/panjsurah/kull2/
+    - assets/panjsurah/bakhsish/
+    - assets/panjsurah/izkar/
+    - assets/panjsurah/sawab/
+    - assets/panjsurah/shifamahi/
+    - assets/panjsurah/tajtunjina/
+    - assets/panjsurah/mufassil/
