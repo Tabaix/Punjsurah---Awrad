@@ -8,7 +8,9 @@ import '../widgets/app_drawer.dart';
 import 'reader_screen.dart';
 import 'settings_screen.dart';
 import 'tasbeeh_screen.dart';
+import 'quran_screen.dart';
 import '../utils/prefs_helper.dart';
+import '../widgets/banner_ad_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TasbeehScreen())),
         child: const Icon(Icons.fingerprint, color: Colors.white, size: 30),
       ),
+      bottomNavigationBar: const BannerAdWidget(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -117,6 +120,49 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+
+          // ── Quran Banner ─────────────────────────────────────────────────────
+          if (!_isSearching)
+            SliverToBoxAdapter(
+              child: GestureDetector(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuranScreen())),
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF1A237E), Color(0xFF283593)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [BoxShadow(color: const Color(0xFF1A237E).withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 52, height: 52,
+                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle),
+                        child: const Center(child: Text('📖', style: TextStyle(fontSize: 26))),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('قرآن کریم', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'JameelNooriNastaliq')),
+                            Text('مکمل قرآن کریم با اردو ترجمہ', style: TextStyle(color: Colors.white70, fontSize: 11, fontFamily: 'JameelNooriNastaliq')),
+                            const SizedBox(height: 4),
+                            const Text('Full Quran — 114 Surahs with Urdu Translation', style: TextStyle(color: Colors.white54, fontSize: 10)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 16),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
           if (filteredAll.isNotEmpty) ...[
             _buildSectionHeader('فہرست', const Color(0xFF1B5E20)),
@@ -164,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 8),
           Text(title, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold), textDirection: TextDirection.rtl),
           const Spacer(),
-          Container(height: 1, color: color.withOpacity(0.2), width: 100),
+          Container(height: 1, color: color.withValues(alpha: 0.2), width: 100),
         ]),
       ),
     );
@@ -172,10 +218,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildGrid(List<Chapter> chapters, Color color) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.5),
-        delegate: SliverChildBuilderDelegate((ctx, i) => ChapterCard(chapter: chapters[i], accentColor: color), childCount: chapters.length),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, 
+          crossAxisSpacing: 8, 
+          mainAxisSpacing: 8, 
+          childAspectRatio: 0.85
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (ctx, i) => ChapterCard(chapter: chapters[i], accentColor: color), 
+          childCount: chapters.length
+        ),
       ),
     );
   }
@@ -194,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white24)),
+        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white24)),
         child: Row(children: [
           const CircleAvatar(backgroundColor: Colors.amber, child: Icon(Icons.play_arrow, color: Colors.white)),
           const SizedBox(width: 12),

@@ -2,6 +2,8 @@
 // App settings: reader brightness/font-scale, keep-screen-on, RTL toggle.
 
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:in_app_review/in_app_review.dart';
 import '../utils/prefs_helper.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -170,22 +172,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                 _card(children: [
                   const ListTile(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 4),
-                    leading: Icon(Icons.apps,
-                        color: Color(0xFF1B5E20)),
-                    title: Text('مجموعہ اوراد و وظائف'),
-                    subtitle: Text('ورژن 1.0.0'),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                    leading: Icon(Icons.verified_user, color: Color(0xFF1B5E20)),
+                    title: Text('پنج سورہ اور مجموعہ وظائف'),
+                    subtitle: Text('ورژن 1.0.0 (Global Edition)'),
                   ),
                   const Divider(),
-                  const ListTile(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 4),
-                    leading: Icon(Icons.source,
-                        color: Color(0xFF1B5E20)),
-                    title: Text('مواد کے ذرائع'),
-                    subtitle: Text(
-                        'پنج سورہ شریف APK + vFlat اسکین'),
+                  ListTile(
+                    onTap: () {
+                      Share.share(
+                        'ڈاؤن لوڈ کریں "پنج سورہ اور مجموعہ وظائف" ایپ:\nhttps://play.google.com/store/apps/details?id=com.panjsurah.awrad',
+                        subject: 'مجموعہ وظائف ایپ',
+                      );
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                    leading: const Icon(Icons.share, color: Color(0xFF1B5E20)),
+                    title: const Text('دوستوں کے ساتھ شیئر کریں'),
+                    subtitle: const Text('صدقہ جاریہ میں حصہ لیں'),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    onTap: () async {
+                      final InAppReview inAppReview = InAppReview.instance;
+                      if (await inAppReview.isAvailable()) {
+                        inAppReview.requestReview();
+                      }
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                    leading: const Icon(Icons.star_rate, color: Colors.amber),
+                    title: const Text('ایپ کی درجہ بندی کریں'),
+                    subtitle: const Text('ہمیں پلے اسٹور پر اپنی رائے دیں'),
                   ),
                 ]),
 
@@ -237,7 +253,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -296,12 +312,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (confirmed == true && mounted) {
       await PrefsHelper.clearLastRead();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('آخری مطالعہ صاف ہو گیا'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('آخری مطالعہ صاف ہو گیا'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 }

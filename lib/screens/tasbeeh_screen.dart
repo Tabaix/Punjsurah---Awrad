@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/banner_ad_widget.dart';
 
 class TasbeehScreen extends StatefulWidget {
   const TasbeehScreen({super.key});
@@ -116,7 +117,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 shape: BoxShape.circle,
                 color: Colors.white,
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20, spreadRadius: 5),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, spreadRadius: 5),
                 ],
                 border: Border.all(color: const Color(0xFF1B5E20), width: 8),
               ),
@@ -149,7 +150,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   shape: BoxShape.circle,
                   color: const Color(0xFF1B5E20),
                   boxShadow: [
-                    BoxShadow(color: Colors.green.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 5)),
+                    BoxShadow(color: Colors.green.withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 5)),
                   ],
                 ),
                 child: const Icon(Icons.touch_app, color: Colors.white, size: 50),
@@ -167,6 +168,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: const BannerAdWidget(),
     );
   }
 }

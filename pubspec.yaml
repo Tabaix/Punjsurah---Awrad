@@ -1,7 +1,7 @@
 name: awrad_app
 description: Majmua Awrad wa Wazaif + PanjSurah Shareef - Islamic Book App
 publish_to: 'none'
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -12,9 +12,19 @@ dependencies:
   cupertino_icons: ^1.0.6
   photo_view: ^0.15.0
   shared_preferences: ^2.2.2
+  http: ^1.6.0
+  url_launcher: ^6.3.2
+  path_provider: ^2.1.2
+  just_audio: ^0.9.36
+  share_plus: ^7.2.2
+  in_app_review: ^2.0.8
+  connectivity_plus: ^5.0.2
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   flutter_lints: ^3.0.1
   # Tool for app icon generation
