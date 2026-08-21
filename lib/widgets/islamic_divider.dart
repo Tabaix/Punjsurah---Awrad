@@ -21,7 +21,7 @@ class IslamicDivider extends StatelessWidget {
         children: [
           Expanded(
             child: Divider(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               thickness: 1,
             ),
           ),
@@ -30,14 +30,14 @@ class IslamicDivider extends StatelessWidget {
             child: Text(
               ornament,
               style: TextStyle(
-                color: color.withOpacity(0.5),
+                color: color.withValues(alpha: 0.5),
                 fontSize: 12,
               ),
             ),
           ),
           Expanded(
             child: Divider(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               thickness: 1,
             ),
           ),

@@ -31,6 +31,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
   double _readerBrightness = 1.0;
   bool _isCurrentPageBookmarked = false;
   double _fontSize = 24.0;
+  bool _isHorizontal = true;
+  bool _isRtl = true;
 
   @override
   void initState() {
@@ -45,7 +47,17 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   Future<void> _loadReaderSettings() async {
     final brightness = await PrefsHelper.getBrightness();
-    if (mounted) setState(() => _readerBrightness = brightness);
+    final isHorizontal = await PrefsHelper.getHorizontalNav();
+    final isRtl = await PrefsHelper.getRtlLayout();
+    final fontSize = await PrefsHelper.getFontScale() * 24.0;
+    if (mounted) {
+      setState(() {
+        _readerBrightness = brightness;
+        _isHorizontal = isHorizontal;
+        _isRtl = isRtl;
+        _fontSize = fontSize;
+      });
+    }
   }
 
   Future<void> _checkBookmarkStatus() async {
@@ -123,7 +135,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
               textDirection: TextDirection.rtl,
               style: TextStyle(
                 fontSize: _fontSize,
-                fontFamily: 'JameelNooriNastaliq',
+                fontFamily: '', // Use system font to handle Arabic marks better
                 height: 2.0,
                 color: _isNightMode ? Colors.white : Colors.black,
               ),
@@ -165,7 +177,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
                       ? const ColorFilter.matrix([-1,0,0,0,255, 0,-1,0,0,255, 0,0,-1,0,255, 0,0,0,1,0])
                       : const ColorFilter.mode(Colors.transparent, BlendMode.multiply),
                   child: PhotoViewGallery.builder(
-                    scrollDirection: Axis.vertical,
+                    scrollDirection: _isHorizontal ? Axis.horizontal : Axis.vertical,
+                    reverse: _isHorizontal && _isRtl,
                     pageController: _pageController,
                     itemCount: widget.chapter.pageCount,
                     onPageChanged: (index) {
@@ -212,29 +225,11 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 ),
               ),
               Expanded(child: Text(widget.chapter.titleUrdu, style: const TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'JameelNooriNastaliq', fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-              if (widget.chapter.isTextOnly)
-                IconButton(
-                  icon: const Icon(Icons.text_fields, color: Colors.amber),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text('فونٹ سائز ایڈجسٹ کریں', style: TextStyle(fontFamily: 'JameelNooriNastaliq', fontSize: 20)),
-                            Slider(
-                              value: _fontSize,
-                              min: 16, max: 40,
-                              onChanged: (v) => setState(() => _fontSize = v),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              IconButton(
+                icon: const Icon(Icons.settings, color: Colors.amber),
+                onPressed: _showQuickSettings,
+                tooltip: 'Settings',
+              ),
               IconButton(
                 icon: Icon(_isCurrentPageBookmarked ? Icons.bookmark : Icons.bookmark_border, color: Colors.amber),
                 onPressed: _toggleBookmark,
@@ -287,6 +282,98 @@ class _ReaderScreenState extends State<ReaderScreen> {
                     child: Text('$_currentPage / ${widget.chapter.pageCount}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                   ),
                 ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showQuickSettings() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Quick Settings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+                ],
+              ),
+              const Divider(),
+              // Brightness Slider
+              ListTile(
+                leading: const Icon(Icons.brightness_medium, color: Color(0xFF1B5E20)),
+                title: const Text('Brightness'),
+                trailing: Text('${(_readerBrightness * 100).toInt()}%'),
+              ),
+              Slider(
+                value: _readerBrightness,
+                min: 0.1, max: 1.0,
+                activeColor: const Color(0xFF1B5E20),
+                thumbColor: const Color(0xFF1B5E20),
+                onChanged: (v) {
+                  setState(() => _readerBrightness = v);
+                  setModalState(() {});
+                  PrefsHelper.setBrightness(v);
+                },
+              ),
+              if (widget.chapter.isTextOnly) ...[
+                const SizedBox(height: 10),
+                ListTile(
+                  leading: const Icon(Icons.format_size, color: Color(0xFF1B5E20)),
+                  title: const Text('Font Size'),
+                  trailing: Text('${_fontSize.toInt()}'),
+                ),
+                Slider(
+                  value: _fontSize,
+                  min: 16, max: 48,
+                  activeColor: const Color(0xFF1B5E20),
+                  thumbColor: const Color(0xFF1B5E20),
+                  onChanged: (v) {
+                    setState(() => _fontSize = v);
+                    setModalState(() {});
+                    PrefsHelper.setFontScale(v / 24.0);
+                  },
+                ),
+              ],
+              const SizedBox(height: 10),
+              SwitchListTile(
+                title: const Text('Night Mode'),
+                secondary: const Icon(Icons.dark_mode, color: Color(0xFF1B5E20)),
+                value: _isNightMode,
+                activeThumbColor: const Color(0xFF1B5E20),
+                onChanged: (v) {
+                  setState(() => _isNightMode = v);
+                  setModalState(() {});
+                },
+              ),
+              if (!widget.chapter.isTextOnly)
+                SwitchListTile(
+                  title: const Text('Horizontal Navigation'),
+                  secondary: const Icon(Icons.swap_horiz, color: Color(0xFF1B5E20)),
+                  subtitle: const Text('Swipe left/right to change pages'),
+                  value: _isHorizontal,
+                  activeThumbColor: const Color(0xFF1B5E20),
+                  onChanged: (v) {
+                    setState(() => _isHorizontal = v);
+                    setModalState(() {});
+                    PrefsHelper.setHorizontalNav(v);
+                  },
+                ),
+              const SizedBox(height: 20),
+              const Text('Made with ❤ by Tayyab Ali', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              const Text('tabaix.com', style: TextStyle(color: Color(0xFF1B5E20), fontSize: 12, fontWeight: FontWeight.bold)),
             ],
           ),
         ),

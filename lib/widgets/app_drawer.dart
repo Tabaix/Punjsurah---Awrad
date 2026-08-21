@@ -11,8 +11,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final panjSurah = panjsurahChapters;
-    final awrad = awradChapters; // This includes "Full Book" at the top
+    const panjSurah = panjsurahChapters;
+    const awrad = awradChapters; // This includes "Full Book" at the top
 
     return Drawer(
       backgroundColor: const Color(0xFFF5F0E8),

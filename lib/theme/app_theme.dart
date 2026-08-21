@@ -50,10 +50,10 @@ class AppTheme {
       bodyLarge: TextStyle(fontFamily: urduFont),
       bodyMedium: TextStyle(fontFamily: urduFont, height: 1.4),
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       color: AppColors.surface,
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

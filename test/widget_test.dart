@@ -15,6 +15,9 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const AwradApp());
 
+    // Clear the splash screen timer and animations
+    await tester.pumpAndSettle();
+
     // Verify that AwradApp loads and shows the splash screen or home screen.
     expect(find.byType(MaterialApp), findsOneWidget);
   });

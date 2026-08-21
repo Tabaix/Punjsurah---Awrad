@@ -18,6 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   double _fontScale    = 1.0;
   bool   _keepScreenOn = true;
   bool   _rtlLayout    = true;
+  bool   _horizontalNav = true;
   bool   _loading      = true;
 
   @override
@@ -31,12 +32,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final fontScale    = await PrefsHelper.getFontScale();
     final keepScreenOn = await PrefsHelper.getKeepScreenOn();
     final rtl          = await PrefsHelper.getRtlLayout();
+    final horizontal   = await PrefsHelper.getHorizontalNav();
     if (!mounted) return;
     setState(() {
       _brightness   = brightness;
       _fontScale    = fontScale;
       _keepScreenOn = keepScreenOn;
       _rtlLayout    = rtl;
+      _horizontalNav = horizontal;
       _loading      = false;
     });
   }
@@ -162,6 +165,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       PrefsHelper.setRtlLayout(v);
                     },
                   ),
+
+                  const Divider(),
+
+                  SwitchListTile.adaptive(
+                    value: _horizontalNav,
+                    activeTrackColor: const Color(0xFF2E7D32),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 4),
+                    title: const Text('افقی نیویگیشن (Horizontal)'),
+                    subtitle: const Text('صفحات کو بائیں/دائیں سوائپ کریں'),
+                    secondary: const Icon(Icons.swap_horiz,
+                        color: Color(0xFF2E7D32)),
+                    onChanged: (v) {
+                      setState(() => _horizontalNav = v);
+                      PrefsHelper.setHorizontalNav(v);
+                    },
+                  ),
                 ]),
 
                 const SizedBox(height: 16),
@@ -176,6 +196,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     leading: Icon(Icons.verified_user, color: Color(0xFF1B5E20)),
                     title: Text('پنج سورہ اور مجموعہ وظائف'),
                     subtitle: Text('ورژن 1.0.0 (Global Edition)'),
+                  ),
+                  const Divider(),
+                  const ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                    leading: Icon(Icons.favorite, color: Colors.red),
+                    title: Text('Developed with ❤'),
+                    subtitle: Text('Tayyab Ali (tabaix.com)'),
                   ),
                   const Divider(),
                   ListTile(

@@ -17,5 +17,6 @@ void main() async {
     file.copySync(destPath);
     i++;
   }
+  // ignore: avoid_print
   print('Copied ${i-1} files to pages.');
 }

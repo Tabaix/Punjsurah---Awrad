@@ -16,8 +16,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.panjsurah.awrad"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -31,9 +31,9 @@ android {
     defaultConfig {
         applicationId = "com.panjsurah.awrad"
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        targetSdk = 36
+        versionCode = 12
+        versionName = "1.3.4"
     }
 
     signingConfigs {

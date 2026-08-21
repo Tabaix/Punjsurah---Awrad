@@ -31,12 +31,12 @@ class ChapterCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: accentColor.withOpacity(0.3),
+            color: accentColor.withValues(alpha: 0.3),
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -81,7 +81,7 @@ class ChapterCard extends StatelessWidget {
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(color: accentColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: accentColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
               child: Text(
                 '${chapter.pageCount} صفحات',
                 style: TextStyle(

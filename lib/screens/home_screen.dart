@@ -62,10 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     final filteredAll = _filterList(allChapters);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (didPop) return;
         SystemNavigator.pop(); // Completely and instantly exit the app
-        return false;
       },
       child: Scaffold(
         drawer: const AppDrawer(),
@@ -152,8 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text('قرآن کریم', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'JameelNooriNastaliq')),
                             Text('مکمل قرآن کریم با اردو ترجمہ', style: TextStyle(color: Colors.white70, fontSize: 11, fontFamily: 'JameelNooriNastaliq')),
-                            const SizedBox(height: 4),
-                            const Text('Full Quran — 114 Surahs with Urdu Translation', style: TextStyle(color: Colors.white54, fontSize: 10)),
+                            SizedBox(height: 4),
+                            Text('Full Quran — 114 Surahs with Urdu Translation', style: TextStyle(color: Colors.white54, fontSize: 10)),
                           ],
                         ),
                       ),

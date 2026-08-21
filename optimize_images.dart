@@ -38,6 +38,7 @@ void main() async {
     'assets/panjsurah/mufassil',
   ];
 
+  // ignore: avoid_print
   print('🚀 Starting Professional Image Optimization...');
   int totalFiles = 0;
   int optimizedFiles = 0;
@@ -57,24 +58,33 @@ void main() async {
       final image = img.decodeImage(bytes);
 
       if (image != null) {
-        // Optimization: Convert to WebP with 80% quality (best balance)
-        final webpBytes = img.encodeWebP(image, quality: 80);
+        // Optimization: Fallback to JPG since WebP encoding is not supported in image 4.8.0
+        // TODO: Switch back to WebP when supported by the 'image' package
+        final optimizedBytes = img.encodeJpg(image, quality: 80);
         
-        // Create new filename: image.jpg -> image.webp
-        final newPath = file.path.replaceAll(RegExp(r'\.(jpg|png)$'), '.webp');
+        // Create new filename: image.png -> image.jpg (keeping original if already jpg)
+        final newPath = file.path.replaceAll(RegExp(r'\.png$'), '.jpg');
         
-        File(newPath).writeAsBytesSync(webpBytes);
+        if (newPath != file.path) {
+          File(newPath).writeAsBytesSync(optimizedBytes);
+          file.deleteSync();
+        } else {
+          file.writeAsBytesSync(optimizedBytes);
+        }
         
-        // Delete original heavy file
-        file.deleteSync();
         optimizedFiles++;
-        print('✅ Optimized: ${file.path.split(Platform.pathSeparator).last} -> WebP');
+        // ignore: avoid_print
+        print('✅ Optimized: ${file.path.split(Platform.pathSeparator).last}');
       }
     }
   }
 
+  // ignore: avoid_print
   print('\n✨ Optimization Complete!');
+  // ignore: avoid_print
   print('📊 Total images found: $totalFiles');
+  // ignore: avoid_print
   print('📦 Total images converted to WebP: $optimizedFiles');
+  // ignore: avoid_print
   print('⚠️ IMPORTANT: Now update your chapters_data.dart to look for .webp files.');
 }

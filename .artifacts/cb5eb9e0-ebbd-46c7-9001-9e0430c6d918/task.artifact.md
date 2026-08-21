@@ -1,0 +1,9 @@
+- `[x]` Add dependencies: `scrollable_positioned_list`, `audio_service`
+- `[x]` Implement `QuranAudioService` for background playback and state management
+- `[x]` Update `SurahDetailScreen` & `JuzDetailScreen` in `quran_screen.dart`:
+    - `[x]` Integrate `ScrollablePositionedList`
+    - `[x]` Implement Aya auto-scroll and glow highlighting
+    - `[x]` Add "Mushaf Mode" (Page View) toggle and UI
+- `[x]` Create and integrate `QuranMiniPlayer` persistent widget
+- `[/]` Verify audio background persistence and auto-scroll accuracy
+- `[ ]` Finalize GitHub push with new features

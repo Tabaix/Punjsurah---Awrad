@@ -11,6 +11,7 @@ class PrefsHelper {
   static const String _keyFontScale      = 'font_scale';
   static const String _keyKeepScreenOn   = 'keep_screen_on';
   static const String _keyRtlLayout     = 'rtl_layout';
+  static const String _keyHorizontalNav = 'horizontal_nav';
   static const String _keyBookmarks     = 'bookmarks_list';
 
   // ─── Last-read bookmarking ───────────────────────────────────────────────────
@@ -95,5 +96,15 @@ class PrefsHelper {
   static Future<void> setRtlLayout(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyRtlLayout, value);
+  }
+
+  static Future<bool> getHorizontalNav() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyHorizontalNav) ?? true;
+  }
+
+  static Future<void> setHorizontalNav(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyHorizontalNav, value);
   }
 }
